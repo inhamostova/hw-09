@@ -7,44 +7,73 @@ function createPromise(position, delay) {
   }
 }
 
-// const a = 5;
-// const b = 10;
+// const promise = new Promise((resolve, reject) => {
+//   const canFulfill = Math.random() > 0.5;
+//   setTimeout(() => {
+//     if (canFulfill) {
+//       resolve('fulfill');
+//     }
 
-// function sum(x, y) {
-//   return x + y;
-// }
+//     reject('promise run with error');
+//   }, 2000);
+// });
 
-// console.log(sum(a, b));
+// console.log(promise);
+// promise.then(
+//   res => console.log(`✅ ${res}`),
+//   err => console.log(`❌ ${err}`)
+// );
 
-// const makeGreeting = guestName => {
-//   if (guestName === '' || guestName === undefined) {
-//     return {
-//       success: false,
-//       message: 'Guest name must not be empty',
-//     };
-//   }
+// const makeOrder = (dish, onSuccess, onError) => {
+//   const passed = Math.random() > 0.5;
 
-//   return {
-//     success: true,
-//     message: `Welcome ${guestName}`,
-//   };
+//   setTimeout(() => {
+//     if (passed) {
+//       onSuccess(`Here is your dish ${dish}`);
+//     } else {
+//       onError('Finish dishes ❤️‍🩹');
+//     }
+//   }, 1000);
 // };
 
-// const result = makeGreeting('Mango');
+const makeOrder = dish => {
+  return new Promise((resolve, reject) => {
+    const passed = Math.random() > 0.5;
 
-// if (result.success) {
-//   console.log(result.message);
-// } else {
-//   console.error(result.message);
-// }
-
-const makeGreeting = guestName => {
-  if (guestName === '' || guestName === undefined) {
-    return Promise.reject('Guest name must not be empty');
-  }
-  return new Promise(resolve => resolve(`Welcome ${guestName}`));
+    setTimeout(() => {
+      if (passed) {
+        resolve(`Here is your dish ${dish}`);
+      }
+      reject('Finish dishes ❤️‍🩹');
+    }, 1000);
+  });
 };
 
-const result = makeGreeting('');
+makeOrder('piro*ok')
+  .then(onOrderSuccess)
+  .catch(onOrderError)
+  .finally(() => console.log('block finally'));
 
-result.then(value => console.log(value)).catch(error => console.log(error));
+// makeOrder('piro*ok', onOrderSuccess, onOrderError);
+
+function onOrderSuccess(res) {
+  console.log('onOrderSuccess');
+  console.log(res);
+}
+
+function onOrderError(err) {
+  console.log('onOrderError❌');
+  console.log(err);
+}
+
+// makeOrder('piro*ok', onOrderSuccess, onOrderError);
+
+// function onOrderSuccess(res) {
+//   console.log('onOrderSuccess');
+//   console.log(res);
+// }
+
+// function onOrderError(err) {
+//   console.log('onOrderError❌');
+//   console.log(err);
+// }
