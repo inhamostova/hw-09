@@ -1,2 +1,0 @@
-!function(){var o;(o="piro*ok",new Promise((function(n,c){var e=Math.random()>.5;setTimeout((function(){e&&n("Here is your dish ".concat(o)),c("Finish dishes ❤️‍🩹")}),1e3)}))).then((function(o){console.log("onOrderSuccess"),console.log(o)})).catch((function(o){console.log("onOrderError❌"),console.log(o)})).finally((function(){return console.log("block finally")}))}();
-//# sourceMappingURL=03-promises.eac62d26.js.map
