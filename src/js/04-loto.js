@@ -7,10 +7,10 @@ btnStart.addEventListener('click', onStart);
 
 function onStart() {
   const result = [];
-  const boxArray = container.children;
+  const boxArray = [...container.children];
 
-  [...boxArray].forEach(box => insertTextContent(box, ''));
-  [...boxArray].forEach((box, i) => {
+  boxArray.forEach(box => insertTextContent(box, ''));
+  boxArray.forEach((box, i) => {
     createPromise(i)
       .then(val => {
         insertTextContent(box, val);
@@ -38,8 +38,9 @@ function createPromise(delay) {
     setTimeout(() => {
       if (isSuccess) {
         res('🍋');
+      } else {
+        rej('❌');
       }
-      rej('❌');
     }, 1000 * delay);
   });
 }
