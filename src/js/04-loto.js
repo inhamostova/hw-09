@@ -1,43 +1,52 @@
 import { Notify } from 'notiflix';
 
+const ANIMATION_DELAY = 500;
+
 const btnStart = document.querySelector('button[type=button]');
 const container = document.querySelector('.js-container');
 
 btnStart.addEventListener('click', onStart);
 
 function onStart() {
-  let counter = 0;
   const boxArray = [...container.children];
-  const promises = boxArray.map(createPromise);
-  Promise.allSettled(promises).then(items => {
-    items.forEach((item, i) => {
-      boxArray[i].textContent = '';
-      setTimeout(() => {
-        boxArray[i].textContent = item.value || item.reason;
-        if (item.status === 'fulfilled') counter += 1;
+  boxArray.forEach(box => (box.textContent = ''));
+  const promises = boxArray.map((_, i) => createPromise(i));
 
-        if (i === boxArray.length - 1) {
-          if (counter === boxArray.length || !counter) {
-            Notify.success('Winner');
-          } else {
-            Notify.failure('Looser!');
-          }
-        }
-      }, 1000 * i);
+  Promise.allSettled(promises).then(items => {
+    const result = items.filter(({ status }) => status === 'fulfilled').length;
+
+    setTimeout(() => {
+      if (!result || result === boxArray.length) {
+        Notify.success('Winner');
+      } else {
+        Notify.failure('Loser');
+      }
+    }, ANIMATION_DELAY * items.length);
+
+    items.forEach((item, i) => {
+      setTimeout(() => {
+        boxArray[i].textContent = item.value ?? item.reason;
+      }, ANIMATION_DELAY * i);
     });
   });
 }
 
-function createPromise() {
+function createPromise(delay) {
   return new Promise((res, rej) => {
     const isSuccess = Math.random() > 0.5;
-    if (isSuccess) {
-      res('🍋');
-    } else {
-      rej('❌');
-    }
+    setTimeout(() => {
+      if (isSuccess) {
+        res('🍋');
+      } else {
+        rej('❌');
+      }
+    }, ANIMATION_DELAY * delay);
   });
 }
+
+// function insertTextContent(box, text) {
+//   box.textContent = text;
+// }
 
 // function onStart() {
 //   const result = [];
@@ -63,8 +72,4 @@ function createPromise() {
 //         }
 //       });
 //   });
-// }
-
-// function insertTextContent(box, text) {
-//   box.textContent = text;
 // }
